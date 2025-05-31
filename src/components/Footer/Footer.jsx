@@ -1,15 +1,30 @@
-import styles from "./Footer.module.css";
+// import styles from "./Footer.module.css";
 
-function Footer(){
-    return(
-        <div className={styles.container}>
-            <footer className={styles.footer}>
-                <h2 className={styles.footer_title}>Movie App</h2>
-                <p className={styles.footer_author}>Created By Rifa Fradita Safara</p>
-            </footer>
+import styled from "styled-components";
 
-        </div>
-    );
+const Container = styled.div`
+  background-color: #222;
+  padding: 2rem;
+  color: white;
+  text-align: center;
+`;
+
+const Title = styled.h2`
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+`;
+
+const Author = styled.p`
+  font-size: 1rem;
+`;
+
+function Footer() {
+  return (
+    <Container>
+      <Title>Movie App</Title>
+      <Author>Dibuat oleh Rifa Fradita Safara</Author>
+    </Container>
+  );
 }
 
 export default Footer;

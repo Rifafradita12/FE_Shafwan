@@ -6,6 +6,7 @@ import Movies from '../components/Movies/Movies';
 import Counter from '../components/Counter';
 import AddMovieForm from '../components/AddMovie/AddMovie';
 import data from '../utils/constans/data';
+import Button from "../components/UI/Button/Index";
 
 
 
@@ -17,6 +18,8 @@ function Home() {
             {/* <Navbar /> */}
             <main>
                 <Hero />
+                {/* <Button variant="primary">Lihat</Button>
+                 <Button variant="secondary" full>Lihat</Button> */}
                 <Movies movies={movies} setMovies={setMovies} />
                 <AddMovieForm movies={movies} setMovies={setMovies} />
                 {/* <Counter /> */}
