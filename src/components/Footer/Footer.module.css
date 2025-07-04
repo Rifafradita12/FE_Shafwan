@@ -1,31 +1,58 @@
-/* Small Screen */
-.container {
-  background-color: #4361ee;
-  color: #fff;
-  padding: 1rem;
+.footer {
+  background: linear-gradient(120deg, #4361ee 0%, #364fc7 100%);
+  color: #080808;
   text-align: center;
+  padding: 2.5rem 1.5rem;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: background 0.4s ease;
+}
+
+.footer:hover {
+  background: linear-gradient(120deg, #3b5bdb 0%, #273c75 100%);
 }
 
 .footer__title {
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 0.3s ease;
+  color: #ffffff;
+}
+
+.footer__title:hover {
+  transform: scale(1.05);
 }
 
 .footer__author {
-  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-style: italic;
+  opacity: 0.95;
+  margin-bottom: 0.25rem;
+  color: #eaeaea;
 }
 
-/* Medium Screen */
+.footer__copyright {
+  font-size: 0.85rem;
+  opacity: 0.75;
+  margin-top: 0.5rem;
+  color: #dddddd;
+}
+
+/* Responsive Tweaks */
 @media (min-width: 768px) {
-  /*
-   * Nothing TODO here.
-   * We dont change styling footer. 
-   */
-}
+  .footer {
+    padding: 3rem 2rem;
+    background-position: top center;
+  }
 
-/* Large Screen */
-@media (min-width: 992px) {
-  /*
-   * Nothing TODO here.
-   * We dont change styling footer. 
-   */
+  .footer__title {
+    font-size: 2.2rem;
+  }
 }

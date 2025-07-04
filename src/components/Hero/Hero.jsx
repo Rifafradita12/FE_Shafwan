@@ -1,75 +1,144 @@
-// import styles from "./Hero.module.css";
-// components/Hero.jsx
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import Button from "../Button";
+import Button from "../UI/button/Index";
+import axios from "axios";
 
-const Container = styled.div`
+const StyledHero = styled.section`
+  margin: 2rem 1rem;
   padding: 2rem;
-  background-color: #f8f8f8;
-`;
-
-const HeroSection = styled.section`
+  border-radius: 20px;
+  background-color:rgba(228, 235, 191, 0.77);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  text-align: center;
   gap: 2rem;
-`;
 
-const Left = styled.div`
-  flex: 1;
-`;
+  .left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 
-const Right = styled.div`
-  flex: 1;
-`;
+  .right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
 
-const Title = styled.h2`
-  font-size: 2rem;
-  margin-bottom: 1rem;
-`;
+ h2 {
+  color: #4361ee;
+  font-size: 2.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
 
-const Genre = styled.h3`
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-`;
+h2:hover {
+  color: #364fc7;
+  transform: translateY(-5px);
+}
 
-const Description = styled.p`
-  font-size: 1rem;
-  margin-bottom: 1rem;
-`;
+h3 {
+  color: #b5179e;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
 
-const Poster = styled.img`
-  width: 100%;
-  max-width: 300px;
+h3:hover {
+  color: #9d1458;
+  transform: translateY(-3px);
+}
+
+
+  p {
+  color:rgb(15, 14, 14);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  letter-spacing: 0.3px;
+  text-align: justify;
+  background: linear-gradient(to right,rgb(216, 175, 175), #ffffff);
+  padding: 1rem;
+  border-left: 4px solidrgb(109, 118, 158);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+p:hover {
+  background: linear-gradient(to right,rgb(106, 171, 218), #fff);
+  transform: translateY(-2px);
+}
+
+
+  img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (min-width: 992px) {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 3rem;
+    margin: 4rem auto;
+    max-width: 1200px;
+  }
 `;
 
 function Hero() {
-  const [movie, setMovie] = useState({});
+  const [movie, setMovie] = useState(null);
+  const API_KEY = import.meta.env.VITE_API_KEY;
 
   useEffect(() => {
-    async function fetchMovie() {
-      const url = "https://www.omdbapi.com/?apikey=fcf50ae6&i=tt2975590";
-      const response = await fetch(url);
-      const data = await response.json();
-      setMovie(data);
+    async function fetchTrendingMovies() {
+      const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`;
+      const response = await axios(url);
+      return response.data.results[0];
     }
-    fetchMovie();
+
+    async function fetchDetailMovie() {
+      const trending = await fetchTrendingMovies();
+      const detailUrl = `https://api.themoviedb.org/3/movie/${trending.id}?api_key=${API_KEY}&append_to_response=videos`;
+      const response = await axios(detailUrl);
+      setMovie(response.data);
+    }
+
+    fetchDetailMovie();
   }, []);
 
+  if (!movie) return null;
+
   return (
-    <Container>
-      <HeroSection>
-        <Left>
-          <Title>{movie.Title}</Title>
-          <Genre>Genre: {movie.Genre}</Genre>
-          <Description>{movie.Plot}</Description>
-          <Button size="md">Watch</Button>
-        </Left>
-        <Right>
-          <Poster src={movie.Poster} alt={movie.Title} />
-        </Right>
-      </HeroSection>
-    </Container>
+    <StyledHero>
+      <div className="left">
+        <h2>{movie.title || "Untitled Movie"}</h2>
+        <h3>
+          Genre:{" "}
+          {movie.genres?.length
+            ? movie.genres.map((g) => g.name).join(", ")
+            : "Unknown"}
+        </h3>
+        <p>{movie.overview || "No description available."}</p>
+        <Button size="md" variant="primary">
+          Watch
+        </Button>
+      </div>
+      <div className="right">
+        {movie.poster_path ? (
+          <img
+            src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+            alt={movie.title}
+          />
+        ) : (
+          <p>No image available</p>
+        )}
+      </div>
+    </StyledHero>
   );
 }
 

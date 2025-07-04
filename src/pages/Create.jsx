@@ -1,11 +1,18 @@
 // import Navbar from "../components/Navbar/Navbar"
 // import Footer from "../components/Footer/Footer"
 
-function CreateMovie() {
+import AddMovieForm from "../components/AddMovie/AddMovie";
+import Hero from "../components/Hero/Hero";
+
+function CreateMovie({movies,setMovies}) {
   return (
     <>
       {/* <Navbar /> */}
-      <h2>Create Movie</h2>
+      {/* <h2>Create Movie</h2> */}
+      <Hero/>
+      <AddMovieForm
+      movies={movies}
+      setMovies={setMovies}/>
       {/* <Footer /> */}
     </>
   );

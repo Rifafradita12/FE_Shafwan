@@ -1,89 +1,98 @@
 import { useState } from "react";
 import Alert from "../Alert/Alert";
-import styles from "./Addmovie.module.css";
-import Movies from "../Movies/Movies";
+import styles from "./AddMovie.module.css";
+import { useNavigate } from "react-router-dom";
 
-function AddMovieForm({ movies, setMovies }) {
-    const [inputs, setInputs] = useState({
-        title: "",
-        date: ""
+function AddMovieForm(props) {
+  const [formData, setFormData] = useState({
+    title: "",
+    date: ""
+  });
+
+  const [isTitleError, setIsTitleError] = useState(false);
+  const [isDateError, setIsDateError] = useState(false);
+
+  const navigation = useNavigate();
+  const { movies, setMovies } = props;
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value
     });
+  }
 
-    const [formErrors, setFormErrors] = useState({
-        title: false,
-        date: false
-    });
+  function validate() {
+    const { title, date } = formData;
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
+    if (title.trim() === "") {
+      setIsTitleError(true);
+      return false;
+    } else if (date.trim() === "") {
+      setIsDateError(true);
+      setIsTitleError(false);
+      return false;
+    } else {
+      setIsDateError(false);
+      setIsTitleError(false);
+      return true;
+    }
+  }
 
-        setInputs(prev => ({
-            ...prev,
-            [name]: value
-        }));
+  function addMovie() {
+    const movie = {
+      id: crypto.randomUUID(),
+      title: formData.title,
+      year: formData.date,
+      type: "Movie",
+      poster: "https://picsum.photos/200/300"
     };
 
-    const isFormValid = () => {
-        const foundErrors = {
-            title: inputs.title.trim() === "",
-            date: inputs.date.trim() === ""
-        };
+    setMovies([...movies, movie]);
+    navigation("/");
 
-        setFormErrors(foundErrors);
+    // // Reset
+    // setFormData({ title: "", date: "" });
+  }
 
-        return !foundErrors.title && !foundErrors.date;
-    };
+  const {title, date} = formData;
 
-    const saveMovie = () => {
-        const newMovie = {
-            id: crypto.randomUUID(),
-            title: inputs.title,
-            year: inputs.date,
-            type: "Movie",
-            poster: "https://picsum.photos/200/300?grayscale"
-        };
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (validate()) {
+      addMovie();
+    }
+  }
 
-        setMovies([...movies, newMovie]);
+  return (
+    <div className={styles.container}>
+      <form onSubmit={handleSubmit}>
+        <input
+          className={styles.input_form}
+          type="text"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          placeholder="Masukkan Judul Film"
+        />
+        {isTitleError && <Alert>Judul tidak boleh kosong</Alert>}
 
-        // Reset input dan error
-        setInputs({ title: "", date: "" });
-        setFormErrors({ title: false, date: false });
-    };
+        <input
+          className={styles.input_form}
+          type="text"
+          name="date"
+          value={formData.date}
+          onChange={handleChange}
+          placeholder="Masukkan Tahun Rilis"
+        />
+        {isDateError && <Alert>Tanggal tidak boleh kosong</Alert>}
 
-    const submitHandler = (e) => {
-        e.preventDefault();
-        if (isFormValid()) {
-            saveMovie();
-        }
-    };
-
-    return (
-        <div className={styles.container}>
-            <form onSubmit={submitHandler}>
-                <input
-                    className={styles.input_form}
-                    type="text"
-                    name="title"
-                    value={inputs.title}
-                    onChange={handleInputChange}
-                    placeholder="Masukkan Judul Film"
-                />
-                {formErrors.title && <Alert>Judul tidak boleh kosong</Alert>}
-
-                <input
-                    className={styles.input_form}
-                    type="text"
-                    name="date"
-                    value={inputs.date}
-                    onChange={handleInputChange}
-                    placeholder="Masukkan Tahun Rilis"
-                />
-                {formErrors.date && <Alert>Tanggal tidak boleh kosong</Alert>}
-
-                <button className={styles.button_form}>Tambah Film</button>
-            </form>
-        </div>
-    );
+        <button className={styles.button_form}>Tambah Film</button>
+      </form>
+    </div>
+  );
 }
 
 export default AddMovieForm;
