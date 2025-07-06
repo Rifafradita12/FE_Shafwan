@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import Button from "../UI/button/Index";
+import Button from "../Button/Index";
 import axios from "axios";
 
 const StyledHero = styled.section`
